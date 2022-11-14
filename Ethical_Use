@@ -1,0 +1,18 @@
+import pycrack
+
+hash_ = "d04b98f48e8f8bcc15c6ae5ac050801cd6dcfd428fb5f9e65c4e16e7807340fa"
+charset = pycrack.get_charset("LUD")
+min_length = 1
+max_length = 5
+algo = pycrack.get_algorithm("sha256")
+
+print("\n"*80)
+r = pycrack.bruteforce(hash_, charset, min_length, max_length, algo, True)
+if r is None:
+    print("No matches.")
+else:
+    print(f"Match: \033[92m{r}")
+
+print("\033[00m")
+print("\n"*10)
+print"("basic")"
