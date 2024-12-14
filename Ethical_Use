@@ -1,18 +1,32 @@
-import pycrack
+import hashlib
+import itertools
+import time
 
-hash_ = "d04b98f48e8f8bcc15c6ae5ac050801cd6dcfd428fb5f9e65c4e16e7807340fa"
-charset = pycrack.get_charset("LUD")
+def brute_force_sha256(hash_to_check, charset, min_length, max_length):
+    start_time = time.time()
+    for length in range(min_length, max_length + 1):
+        for combination in itertools.product(charset, repeat=length):
+            candidate = "".join(combination)
+            candidate_hash = hashlib.sha256(candidate.encode()).hexdigest()
+            if candidate_hash == hash_to_check:
+                end_time = time.time()
+                print(f"Time taken: {end_time - start_time:.4f} seconds")
+                return candidate
+    end_time = time.time()
+    print(f"Time taken: {end_time - start_time:.4f} seconds")
+    return None
+
+hash_ = "d04b98f48e8f8bcc15c6ae5ac050801cd6dcfd428fb5f9e65c4e16e7807340fa" # "password"
+charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789" # LUD
 min_length = 1
-max_length = 5
-algo = pycrack.get_algorithm("sha256")
+max_length = 6  # Increased for demonstration, but be realistic
 
-print("\n"*80)
-r = pycrack.bruteforce(hash_, charset, min_length, max_length, algo, True)
-if r is None:
-    print("No matches.")
+print("\nStarting brute force...")
+result = brute_force_sha256(hash_, charset, min_length, max_length)
+
+if result:
+    print(f"Match: \033[92m{result}\033[00m")
 else:
-    print(f"Match: \033[92m{r}")
+    print("No match found within specified parameters.")
 
-print("\033[00m")
-print("\n"*10)
-print"("basic")"
+print("\nBasicFinished.")
